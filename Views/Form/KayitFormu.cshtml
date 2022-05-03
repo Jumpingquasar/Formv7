@@ -1,0 +1,91 @@
+﻿@{ViewData["Title"] = "Kayıt Formu";}
+<script src="/js/Form.js" defer ></script>
+
+<div class="container">
+    <div class="row">
+        <h1>Kişisel Bilgi Formu</h1>
+    </div>
+    <form class="needs-validation">
+        <div class="row">
+            <div class="col-md-4">
+                <input class="form-control" id="Isim" placeholder="İsim" required>
+            </div>
+        </div>
+        <div class="form-group row pt-2">
+            <div class="col-md-4">
+                <input class="form-control" id="Soyisim" placeholder="Soyisim" required>
+            </div>
+        </div>
+        <div class="form-group row mt-2">
+            <div class="col-md-4">
+                <label class="control-label" >Doğum Tarihi:</label>
+                <input class="form-control" type="date" id="Dogumgunu" min="1900-01-01" max="" required>
+            </div>
+        </div>
+        
+        <div class="form-group row pt-2">
+            <label class="control-label">Cinsiyet:</label>
+            <div class="col-md-1">
+                <div class="form-check form-check">
+                    <input type="radio" class="form-check-input" id="cinsiyet1" name="cinsiyet" value="erkek" required>
+                    <label class="form-check-label">Erkek</label>
+                </div>     
+            </div>
+            <div class="col-md-1">
+                <div class="form-check form-check">
+                    <input type="radio" class="form-check-input" id="cinsiyet2" name="cinsiyet" value="kadin" required>
+                    <label class="form-check-label">Kadın</label>
+                </div>   
+            </div>
+            <div class="col-md-2">
+                <div class="form-check form-check">
+                    <input type="radio" class="form-check-input" id="cinsiyet3" name="cinsiyet" value="N/A" required>
+                    <label class="form-check-label">Belirtmek istemiyorum</label>
+                </div>    
+            </div>
+            <div class="col-md-1">
+                <div class="form-check form-check">
+                    <input type="radio" class="form-check-input" id="cinsiyet4" name="cinsiyet" value="" required>
+                    <label class="form-check-label">Diğer</label>
+                </div>   
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="cinsiyet4_text" placeholder="Diğer">
+            </div>                        
+        </div>    
+        <div class="form-group row">
+            <label class="control-label">Doğum Yeri:</label>
+            <div class="col-md-3">
+                <select class="form-select" aria-label="Ülke" id="Country" required>
+                    <option value="">Seçiniz</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" aria-label="Şehir" id="City" required>
+                    <option value="">Seçiniz</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 pt-2">
+                <label class="form-label">Profil fotoğrafı:</label>
+                <input class="form-control" type="file" id="FormFileID" name="FormFileID" accept="image/*" required>
+            </div>
+            <div class="col-md-3 pt-2">
+                <img id="preview" src="/Image/Empty.png" alt="preview" width="100" height="100">
+            </div>
+        </div>
+        
+        <div class="input-group pt-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text">İletmek istedikleriniz:</span>
+            </div>
+            <textarea rows="4" style= "height:100%;" class="form-control" aria-label="İletmek istedikleriniz:" id="Not"></textarea>
+        </div>
+        <div class="row pt-2">
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary mb-2" id="Submit">Kaydet</button>
+            </div>
+        </div>   
+    </form>
+</div>
