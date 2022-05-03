@@ -71,7 +71,7 @@ namespace Formv7.Controllers
             _context.SaveChanges();
         }
 
-
+        [HttpPost]
         public void UploadFile(IFormFile ImageUploader)
 
         {
