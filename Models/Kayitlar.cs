@@ -18,6 +18,7 @@ namespace Formv7.Models
         public string DogumYeriUlke { get; set; }
         public string DogumYeriSehir { get; set; }
         public string Not { get; set; }
-        
+        public int MediaID { get; set; }
+
     }
 }

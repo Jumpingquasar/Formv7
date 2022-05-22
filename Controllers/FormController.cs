@@ -54,9 +54,17 @@ namespace Formv7.Controllers
             return null;
         }
 
-        [HttpPost]
-        public void KayitPost(Kayitlar formlistesi)
+        [HttpGet]
+        public List<Okulturu> GetSchool()
         {
+            var data = _context.Okulturu.ToList();
+            return data;
+        }
+
+        [HttpPost]
+        public int KayitPost(Kayitlar formlistesi)
+        {
+            int PersonelID = 0;
             Kayitlar formsonucu = new Kayitlar()
             {
                 Isim = formlistesi.Isim,
@@ -66,34 +74,57 @@ namespace Formv7.Controllers
                 DogumYeriUlke = formlistesi.DogumYeriUlke,
                 DogumYeriSehir = formlistesi.DogumYeriSehir,
                 Not = formlistesi.Not,
+                MediaID = formlistesi.MediaID,
             };
             _context.Kayitlar.Add(formsonucu);
             _context.SaveChanges();
+
+            PersonelID = formsonucu.id;
+
+            return PersonelID;
         }
 
         [HttpPost]
-        public void UploadFile(IFormFile ImageUploader)
-
+        public int UploadFile(IFormFile ImageUploader)
         {
+            int Id = 0;
             if (ImageUploader != null)
             {
+                string MediaName = Guid.NewGuid() + " - " + ImageUploader.FileName;
+
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Image");
-                string FilePath = Path.Combine(uploadsFolder, ImageUploader.FileName);
+                string FilePath = Path.Combine(uploadsFolder, MediaName);
+
                 using (var fileStream = new FileStream(FilePath, FileMode.Create))
                 {
                     ImageUploader.CopyTo(fileStream);
                 }
-                Guid ID = Guid.NewGuid();
-                string MediaID = ImageUploader.FileName + ID;
+
                 Images ImageList = new Images()
                 {
-                    MediaName = ImageUploader.FileName,
+                    MediaName = MediaName,
                     MediaURL = FilePath,
-                    MediaID = MediaID,
                 };
+
                 _context.Images.Add(ImageList);
                 _context.SaveChanges();
-            }          
+                Id = ImageList.MediaID;
+            }
+            return Id;
+        }
+
+        [HttpPost]
+        public void OkulPost(Okul okullistesi)
+        {
+            Okul okulsonucu = new Okul()
+            {
+                OkulTuru = okullistesi.OkulTuru,
+                OkulAdi = okullistesi.OkulAdi,
+                MYili = okullistesi.MYili,
+                PersonelID = okullistesi.PersonelID
+            };
+            _context.Okul.Add(okulsonucu);
+            _context.SaveChanges();
             
         }
     }

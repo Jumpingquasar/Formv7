@@ -1,6 +1,8 @@
 ﻿$(document).ready(function () {
     GetCountry();
     CalendarDate();
+    GetSchool();
+    counter = 0
 });
 
 $("#Country").on("change", function () {
@@ -13,29 +15,39 @@ $("#FormFileID").change(function () {
     if (file) {
         preview.src = URL.createObjectURL(file)
     }
+    uploadFile();
+});
+
+$("#Add").click(function () {
+    counter += 1
+    $(".AddSchool").append(
+        `<div class="row pt-2" id="OkulRow` + counter + `">
+            <div class="col-md-3">
+                <select class="form-select" id="Okul` + counter + `" required>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="OkulAdi` + counter + `" required>
+            </div>
+            <div class="col-md-2">
+                <input class="form-control" type="date" id="MYili` + counter + `" min="1900-01-01" max="" required>
+            </div>
+            <div class="col-md-1">
+                <button type="button" id="OkulSil` + counter + `" class="btn btn-warning" onclick=OkulSil(` + counter + `)>Sil</button>
+            </div>
+        </div>`
+    );
+    var $options = $("#Okul0 > option").clone();
+    $('#Okul' + counter).append($options);
 });
 
 $("#Submit").click(function () {
-    'use strict'
-    var forms = document.querySelectorAll('.needs-validation')
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopImmediatePropagation();
-                }
-                else {
-                    uploadFile();
-                    KayitPost();
-                    
-                }
-                form.classList.add('was-validated')
-            },  false)
-            
-        })
-    
+    KayitPost();   
 });
+
+function OkulSil(OkulSil) {
+    $("#OkulRow" + OkulSil).remove()
+};
 
 function GetCountry() {
 
@@ -81,8 +93,26 @@ function GetCity(countryid) {
     })
 };
 
-function KayitPost() {
+function GetSchool() {
 
+    $.ajax({
+        type: "Get",
+        url: "/Form/GetSchool",
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            console.log(result)
+            for (let i = 0; i < result.length; i++) {
+                x = "<option value=" + result[i].id + ">" + result[i].tur + "</option>";
+                $("#Okul0").append(x);
+            }
+
+
+        }
+    })
+};
+
+function KayitPost() {
     var Isim = $("#Isim").val();
     var Soyisim = $("#Soyisim").val();
     var Dogumgunu = $("#Dogumgunu").val();
@@ -116,6 +146,8 @@ function KayitPost() {
     Kayit["DogumYeriUlke"] = Country;
     Kayit["DogumYeriSehir"] = City;
     Kayit["Not"] = Not;
+    Kayit["MediaID"] = MediaID;
+
 
     $.ajax({
         type: "Post",
@@ -123,13 +155,41 @@ function KayitPost() {
         dataType: "json",
         data: { formlistesi : Kayit },
         async: false,
-        success: function () {
-
-        }
+        success: function (PersonelID) {
+            PersonelID = PersonelID
+            OkulPost(PersonelID);
+        },
     })
+};
+
+function OkulPost(PersonelID) {
+    alert(counter)   
+    
+    while (counter > -1) {
+        var OkulTuru = $("#Okul" + counter + " option:selected").val();
+        var OkulAdi = $("#OkulAdi" + counter).val();
+        var MYili = $("#MYili" + counter).val();
+
+        var Okul = {};
+                
+        Okul["OkulTuru"] = OkulTuru
+        Okul["OkulAdi"] = OkulAdi
+        Okul["MYili"] = MYili
+        Okul["PersonelID"] = PersonelID
+
+        $.ajax({
+            type: "Post",
+            url: "/Form/OkulPost/",
+            dataType: "json",
+            data: { okullistesi: Okul },
+            async: false,
+            success: function (counter) {},
+        })
+        counter -= 1
+               
+    }
     alert("Kayıt tamamlandı.")
     window.location.href = "/Form/KayitFormu";
-    
 };
 
 function CalendarDate() {
@@ -147,10 +207,9 @@ function uploadFile() {
         data: formData,
         contentType: false,
         processData: false,
-        success: function (result) { alert(result); },
-        error: function (err) {
-            alert(err.statusText)
-        }
+        success: function (Id) {
+            MediaID = Id;
+        },        
     });
-
+    
 };

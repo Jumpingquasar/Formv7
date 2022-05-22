@@ -9,7 +9,7 @@ namespace Formv7.Models
     public class Images
     {
         [Key]
-        public string MediaID { get; set; }
+        public int MediaID { get; set; }
         public string MediaName { get; set; }
         public string MediaURL { get; set; }
 

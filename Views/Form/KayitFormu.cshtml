@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row">
-        <h1>Kişisel Bilgi Formu</h1>
+        <h1>Kişisel Bilgi  Kayıt Formu</h1>
     </div>
     <form class="needs-validation">
         <div class="row">
@@ -27,13 +27,13 @@
             <label class="control-label">Cinsiyet:</label>
             <div class="col-md-1">
                 <div class="form-check form-check">
-                    <input type="radio" class="form-check-input" id="cinsiyet1" name="cinsiyet" value="erkek" required>
+                    <input type="radio" class="form-check-input" id="cinsiyet1" name="cinsiyet" value="Erkek" required>
                     <label class="form-check-label">Erkek</label>
                 </div>     
             </div>
             <div class="col-md-1">
                 <div class="form-check form-check">
-                    <input type="radio" class="form-check-input" id="cinsiyet2" name="cinsiyet" value="kadin" required>
+                    <input type="radio" class="form-check-input" id="cinsiyet2" name="cinsiyet" value="Kadın" required>
                     <label class="form-check-label">Kadın</label>
                 </div>   
             </div>
@@ -75,17 +75,45 @@
                 <img id="preview" src="/Image/Empty.png" alt="preview" width="100" height="100">
             </div>
         </div>
-        
-        <div class="input-group pt-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text">İletmek istedikleriniz:</span>
+
+        <div class="row">
+            <div class="input-group pt-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">İletmek istedikleriniz:</span>
+                </div>
+                <textarea rows="4" style= "height:100%;" class="form-control" aria-label="İletmek istedikleriniz:" id="Not"></textarea>
             </div>
-            <textarea rows="4" style= "height:100%;" class="form-control" aria-label="İletmek istedikleriniz:" id="Not"></textarea>
         </div>
+
+        <div class="row pt-2">
+            <label class="control-label"><u>Mezun olduğunuz Okullar:</u></label>
+            <div class="col-md-3">
+                <label class="control-label" >Okul Türü:</label>
+                <select class="form-select" id="Okul0" required>
+                    <option value="">Seçiniz</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="control-label" >Okul Adı:</label>
+                <input type="text" class="form-control" id="OkulAdi0"required>
+            </div> 
+            <div class="col-md-2">
+                <label class="control-label" >Mezuniyet Yılı:</label>
+                <input class="form-control" type="date" id="MYili0" min="1900-01-01" max="" required>
+            </div>
+            <div class = "col-md-2 pt-4">
+                <button type="button" class="btn btn-success" id="Add">Başka okul ekle</button>
+            </div>            
+        </div>
+        
+        <div class="AddSchool">
+            
+        </div>
+
         <div class="row pt-2">
             <div class="col-md-3">
                 <button type="submit" class="btn btn-primary mb-2" id="Submit">Kaydet</button>
             </div>
-        </div>   
+        </div>
     </form>
 </div>

@@ -15,6 +15,8 @@ namespace Formv7.Data
 
         public DbSet<Kayitlar> Kayitlar { get; set; }
         public DbSet<Images> Images { get; set; }
+        public DbSet<Okulturu> Okulturu { get; set; }
+        public DbSet<Okul> Okul { get; set; }
 
     }
 }
