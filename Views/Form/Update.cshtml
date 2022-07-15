@@ -1,6 +1,5 @@
-﻿
-@{ViewData["Title"] = "Kayıt Formu";}
-<script src="/js/Form.js" defer ></script>
+﻿@{ViewData["Title"] = "Kayıt Güncelleme";}
+<script src="/js/Update.js" defer ></script>
 
 <div class="container">
     <div class="row">
@@ -9,12 +8,12 @@
     <form class="needs-validation">
         <div class="row">
             <div class="col-md-4">
-                <input class="form-control" id="Isim" placeholder="İsim" required />
+                <input class="form-control" id="Isim" placeholder="İsim" required>
             </div>
         </div>
-        <div class="row pt-2" >
+        <div class="form-group row pt-2">
             <div class="col-md-4">
-                <input class="form-control" id="Soyisim" placeholder="Soyisim" required />
+                <input class="form-control" id="Soyisim" placeholder="Soyisim" required>
             </div>
         </div>
         <div class="row">
@@ -75,9 +74,9 @@
         <div class="row">
             <div class="col-md-4 pt-2">
                 <label class="form-label">Profil fotoğrafı:</label>
-                <input class="form-control" type="file" id="FormFileID" name="FormFileID" accept="image/*" required>
+                <input class="form-control" type="file" id="FormFileID" name="FormFileID" accept="image/*">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 pt-2">
                 <img id="preview" src="/Image/Empty.png" alt="preview" width="100" height="100">
             </div>
         </div>
@@ -87,17 +86,17 @@
             <label class="control-label fst-italic">(Birden fazla seçebilirsiniz.)</label>
             <div class="col-md-2">
                 <select class="form-select" id="Pozisyon" multiple="multiple" required>
-                    <option value="0">Vardiya şefi</option>
-                    <option value="1">Barista</option>
-                    <option value="2">Mutfak elemanı</option>
-                    <option value="3">Aşçı</option>
-                    <option value="4">Temizlik görevlisi</option>
+                    <option value="0" id="preselect0">Vardiya şefi</option>
+                    <option value="1" id="preselect1">Barista</option>
+                    <option value="2" id="preselect2">Mutfak elemanı</option>
+                    <option value="3" id="preselect3">Aşçı</option>
+                    <option value="4" id="preselect4">Temizlik görevlisi</option>
                 </select>
             </div>
         </div>
 
         <div class="row">
-            <div class="input-group pt-3">
+            <div class="input-group pt-2">
                 <div class="input-group-prepend">
                     <span class="input-group-text">İletmek istedikleriniz:</span>
                 </div>
@@ -132,7 +131,7 @@
 
         <div class="row pt-2">
             <div class="col-md-3">
-                <button type="submit" class="btn btn-primary mb-2" id="Submit">Kaydet</button>
+                <button type="button" class="btn btn-primary mb-2" id="Submit">Kaydet</button>
             </div>
         </div>
     </form>

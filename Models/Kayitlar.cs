@@ -9,9 +9,11 @@ namespace Formv7.Models
 {
     public class Kayitlar
     {
-        public int id { get; set; }
+        [Key]
+        public int PersonelId { get; set; }
         public string Isim { get; set; }
         public string Soyisim { get; set; }
+        public string Email { get; set; }
         [DataType(DataType.Date)]
         public string Dogumgunu { get; set; }
         public string Cinsiyet { get; set; }
@@ -19,6 +21,10 @@ namespace Formv7.Models
         public string DogumYeriSehir { get; set; }
         public string Not { get; set; }
         public int MediaID { get; set; }
+        public bool Aktif { get; set; }
+        public bool Pasif { get; set; }
+        public int[] Pozisyon { get; set; }
+
 
     }
 }

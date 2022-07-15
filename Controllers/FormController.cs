@@ -19,6 +19,7 @@ namespace Formv7.Controllers
     {
         private readonly Formv7Context _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        public int PersonelID;
 
         public FormController(Formv7Context context, IWebHostEnvironment webHostEnvironment)
         {
@@ -30,18 +31,22 @@ namespace Formv7.Controllers
         {
             return View();
         }
-        public IActionResult Personel()
+        public IActionResult Table()
         {
             return View();
         }
+        public IActionResult Update()
+        {
+            return View();
+        }
+        
 
         [HttpGet]
         public List<Cografya> GetCountry()
         {
             var data = _context.Cografya.Where(x => x.UstID == 0).ToList();
             return data;
-        }
-
+        }        
         [HttpGet]
         public List<Cografya> GetCity(int value)
         {
@@ -52,7 +57,26 @@ namespace Formv7.Controllers
 
             }
             return null;
+        }        
+        [HttpGet]
+        public List<Kayitlar> PersonelList()
+        {
+            var data = _context.Kayitlar.ToList();
+            return data;
         }
+        [HttpGet]
+        public List<Cografya> GetCografya()
+        {
+            var result = _context.Cografya.ToList();
+            return result;
+        }
+        [HttpGet]
+        public List<Images> GetImages()
+        {
+            var result = _context.Images.ToList();
+            return result;
+        }
+
 
         [HttpGet]
         public List<Okulturu> GetSchool()
@@ -62,26 +86,44 @@ namespace Formv7.Controllers
         }
 
         [HttpPost]
-        public int KayitPost(Kayitlar formlistesi)
+        public void KayitPost(Kayitlar formlistesi, Okul[] okullistesi)
         {
-            int PersonelID = 0;
             Kayitlar formsonucu = new Kayitlar()
             {
                 Isim = formlistesi.Isim,
                 Soyisim = formlistesi.Soyisim,
+                Email = formlistesi.Email,
                 Dogumgunu = formlistesi.Dogumgunu,
                 Cinsiyet = formlistesi.Cinsiyet,
                 DogumYeriUlke = formlistesi.DogumYeriUlke,
                 DogumYeriSehir = formlistesi.DogumYeriSehir,
                 Not = formlistesi.Not,
                 MediaID = formlistesi.MediaID,
+                Aktif = formlistesi.Aktif,
+                Pasif = formlistesi.Pasif,
+                Pozisyon = formlistesi.Pozisyon
             };
             _context.Kayitlar.Add(formsonucu);
             _context.SaveChanges();
 
-            PersonelID = formsonucu.id;
+            PersonelID = formsonucu.PersonelId;
 
-            return PersonelID;
+            
+
+            for (int i=0; i<okullistesi.Length; i++)
+            {
+                Okul okulsonucu = new Okul()
+                {
+                    OkulTuru = okullistesi[i].OkulTuru,
+                    OkulAdi = okullistesi[i].OkulAdi,
+                    MYili = okullistesi[i].MYili,
+                    PersonelID = PersonelID
+                };
+                _context.Okul.Add(okulsonucu);
+
+            }            
+            _context.SaveChanges();
+
         }
 
         [HttpPost]
@@ -126,6 +168,101 @@ namespace Formv7.Controllers
             _context.Okul.Add(okulsonucu);
             _context.SaveChanges();
             
+        }
+
+        [HttpGet]
+        public List<Kayitlar> KayitGet(int id)
+        {
+            var data = _context.Kayitlar.Where(x => x.PersonelId == id).ToList();
+            return data;
+        }
+
+        [HttpGet]
+        public List<Images> ImageGet(int MediaID)
+        {
+            var ImageData = _context.Images.Where(x => x.MediaID == MediaID).ToList();
+            return ImageData;
+        }
+
+        public List<Okul> OkulGet(int id)
+        {
+            var OkulData = _context.Okul.Where(x => x.PersonelID == id).ToList();
+            return OkulData;
+        }
+
+        public void UpdatePost(Kayitlar formlistesi, Okul[] okullistesi)
+        {
+            Kayitlar formsonucu = new Kayitlar()
+            {
+                PersonelId = formlistesi.PersonelId,
+                Isim = formlistesi.Isim,
+                Soyisim = formlistesi.Soyisim,
+                Email = formlistesi.Email,
+                Dogumgunu = formlistesi.Dogumgunu,
+                Cinsiyet = formlistesi.Cinsiyet,
+                DogumYeriUlke = formlistesi.DogumYeriUlke,
+                DogumYeriSehir = formlistesi.DogumYeriSehir,
+                Not = formlistesi.Not,
+                MediaID = formlistesi.MediaID,
+                Aktif = formlistesi.Aktif,
+                Pasif = formlistesi.Pasif,
+                Pozisyon = formlistesi.Pozisyon
+            };
+            _context.Kayitlar.Update(formsonucu);
+            _context.SaveChanges();
+
+            PersonelID = formsonucu.PersonelId;
+
+            for (int i = 0; i < okullistesi.Length; i++)
+            {
+                if (okullistesi[i].id != 0)
+                {
+                    Okul okulsonucu = new Okul()
+                    {
+                        id = okullistesi[i].id,
+                        PersonelID = formlistesi.PersonelId,
+                        OkulTuru = okullistesi[i].OkulTuru,
+                        OkulAdi = okullistesi[i].OkulAdi,
+                        MYili = okullistesi[i].MYili,
+                    };
+                    _context.Okul.Update(okulsonucu);
+                }
+                else
+                {
+                    Okul okulsonucu = new Okul()
+                    {
+                        PersonelID = formlistesi.PersonelId,
+                        OkulTuru = okullistesi[i].OkulTuru,
+                        OkulAdi = okullistesi[i].OkulAdi,
+                        MYili = okullistesi[i].MYili,
+                    };
+                    _context.Okul.Add(okulsonucu);
+                }
+                
+            }
+            _context.SaveChanges();
+        }
+
+        public void Delete(Kayitlar data)
+        {
+            Kayitlar formsonucu = new Kayitlar()
+            {
+                PersonelId = data.PersonelId,
+                Isim = data.Isim,
+                Soyisim = data.Soyisim,
+                Email = data.Email,
+                Cinsiyet = data.Cinsiyet,
+                DogumYeriUlke = data.DogumYeriUlke,
+                DogumYeriSehir = data.DogumYeriSehir,
+                Not = data.Not,
+                Dogumgunu = data.Dogumgunu,
+                MediaID = data.MediaID,
+                Aktif = false,
+                Pasif = true,
+                Pozisyon = data.Pozisyon
+            };
+            _context.Kayitlar.Update(formsonucu);
+            _context.SaveChanges();
         }
     }
 }

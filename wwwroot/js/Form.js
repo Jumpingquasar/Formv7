@@ -19,6 +19,11 @@ $("#FormFileID").change(function () {
 });
 
 $("#Add").click(function () {
+    if (counter == 4) {
+        alert("Daha fazla okul ekleyemezsiniz.")
+        console.log($("#AddSchool").serializeArray());
+        return
+    };
     counter += 1
     $(".AddSchool").append(
         `<div class="row pt-2" id="OkulRow` + counter + `">
@@ -41,9 +46,10 @@ $("#Add").click(function () {
     $('#Okul' + counter).append($options);
 });
 
-$("#Submit").click(function () {
-    KayitPost();   
-});
+$("#Submit").click((function () {
+    KayitPost();
+    return false;
+}))
 
 function OkulSil(OkulSil) {
     $("#OkulRow" + OkulSil).remove()
@@ -57,7 +63,6 @@ function GetCountry() {
         dataType: "json",
         async: false,
         success: function (result) {
-            console.log(result)
             for (let i = 0; i < result.length; i++) {
                 x = "<option value=" + result[i].id + ">" + result[i].tanim + "</option>";
                 $("#Country").append(x);
@@ -79,7 +84,6 @@ function GetCity(countryid) {
         success: function (result) {
             $("#City").empty();
             $("#City").append("<option>Seçiniz</option>");
-            console.log(result)
             if (result != null) {
                 for (var i = 0; i < result.length; i++) {
                     x = "<option value=" + result[i].id + ">" + result[i].tanim + "</option>";
@@ -101,13 +105,10 @@ function GetSchool() {
         dataType: "json",
         async: false,
         success: function (result) {
-            console.log(result)
             for (let i = 0; i < result.length; i++) {
                 x = "<option value=" + result[i].id + ">" + result[i].tur + "</option>";
                 $("#Okul0").append(x);
             }
-
-
         }
     })
 };
@@ -115,6 +116,7 @@ function GetSchool() {
 function KayitPost() {
     var Isim = $("#Isim").val();
     var Soyisim = $("#Soyisim").val();
+    var Email = $("#email").val();
     var Dogumgunu = $("#Dogumgunu").val();
 
     if ($("#cinsiyet1").is(":checked")) {
@@ -135,61 +137,62 @@ function KayitPost() {
 
     var Country = $("#Country option:selected").val();
     var City = $("#City option:selected").val();
-    var Not = $("#Not").val();
+    var Not = $("#Not").val();    
+    var Aktif = true;
+    var Pasif = false;
 
+    
     var Kayit = {};
+    var Pozisyon = $("#Pozisyon").val();
+    var OkulKayitlari = [];
 
     Kayit["Isim"] = Isim;
     Kayit["Soyisim"] = Soyisim;
+    Kayit["Email"] = Email;
     Kayit["Dogumgunu"] = Dogumgunu;
     Kayit["Cinsiyet"] = Cinsiyet;
     Kayit["DogumYeriUlke"] = Country;
     Kayit["DogumYeriSehir"] = City;
     Kayit["Not"] = Not;
     Kayit["MediaID"] = MediaID;
+    Kayit["Aktif"] = Aktif;
+    Kayit["Pasif"] = Pasif;
+    Kayit["Pozisyon"] = Pozisyon;
 
+
+    while (counter !== -1) {
+        var OkulTuru = $("#Okul" + counter + " option:selected").val();
+        var OkulAdi = $("#OkulAdi" + counter).val();
+        var MYili = $("#MYili" + counter).val();
+
+        if (OkulTuru, OkulAdi, MYili == null) {
+            counter -= 1
+            continue
+        }
+
+        var Okul = {};
+
+        Okul["OkulTuru"] = OkulTuru
+        Okul["OkulAdi"] = OkulAdi
+        Okul["MYili"] = MYili
+
+        OkulKayitlari.push(Okul);
+        counter -= 1
+    }    
 
     $.ajax({
         type: "Post",
         url: "/Form/KayitPost/",
         dataType: "json",
-        data: { formlistesi : Kayit },
+        data: {
+            formlistesi: Kayit,
+            okullistesi: OkulKayitlari,
+        },
         async: false,
-        success: function (PersonelID) {
-            PersonelID = PersonelID
-            OkulPost(PersonelID);
+        success: function () {
         },
     })
-};
-
-function OkulPost(PersonelID) {
-    alert(counter)   
-    
-    while (counter > -1) {
-        var OkulTuru = $("#Okul" + counter + " option:selected").val();
-        var OkulAdi = $("#OkulAdi" + counter).val();
-        var MYili = $("#MYili" + counter).val();
-
-        var Okul = {};
-                
-        Okul["OkulTuru"] = OkulTuru
-        Okul["OkulAdi"] = OkulAdi
-        Okul["MYili"] = MYili
-        Okul["PersonelID"] = PersonelID
-
-        $.ajax({
-            type: "Post",
-            url: "/Form/OkulPost/",
-            dataType: "json",
-            data: { okullistesi: Okul },
-            async: false,
-            success: function (counter) {},
-        })
-        counter -= 1
-               
-    }
-    alert("Kayıt tamamlandı.")
-    window.location.href = "/Form/KayitFormu";
+    window.location.href = "/Form/KayitFormu"
 };
 
 function CalendarDate() {
